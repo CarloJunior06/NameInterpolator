@@ -1,4 +1,5 @@
 ﻿using Es16_05.handler;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Es16_05
 {
@@ -6,14 +7,15 @@ namespace Es16_05
     {
         static void Main(string[] args)
         {
+            var host = ContainerNEW.CreateHostBuilder();
+            var greetHandler = host.Services.GetRequiredService<IGreet>();
             string[] names = AskNames();
-            IGreet greetHandler = InitializeSuccession();
             string greet = greetHandler.Greet(names);
             Console.WriteLine(greet);
         }
         public static string[] AskNames()
         {
-            Console.WriteLine("Insert your name (or names by separating with comma if two names):");
+            Console.WriteLine("Insert your name (or names by separating with comma if two or more):");
             string input = Console.ReadLine();
             if (input == "")
             {
@@ -25,18 +27,18 @@ namespace Es16_05
             }
         }
 
-        public static IGreet InitializeSuccession()
-        {
-            BaseGreetHandler baseGreetHandler = new BaseGreetHandler();
-            NullHandler nullHandler = new NullHandler();
-            ShoutHandler shoutHandler = new ShoutHandler();
-            TwoNamesHandler twoNamesHandler = new TwoNamesHandler();
-
-            nullHandler.SetSuccessor(shoutHandler)
-                       .SetSuccessor(twoNamesHandler)
-                       .SetSuccessor(baseGreetHandler);
-
-            return nullHandler;  
-        }
+        //public static IGreet InitializeSuccession()
+        //{
+        //    BaseGreetHandler baseGreetHandler = new BaseGreetHandler();
+        //    NullHandler nullHandler = new NullHandler();
+        //    ShoutHandler shoutHandler = new ShoutHandler();
+        //    TwoNamesHandler twoNamesHandler = new TwoNamesHandler();
+        //    MultiNameHandler multiNameHandler = new MultiNameHandler();
+        //    nullHandler.SetSuccessor(multiNameHandler)
+        //               .SetSuccessor(shoutHandler)
+        //               .SetSuccessor(twoNamesHandler)
+        //               .SetSuccessor(baseGreetHandler);
+        //    return nullHandler;  
+        //}
     }
 }
